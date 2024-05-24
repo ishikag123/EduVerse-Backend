@@ -1,0 +1,71 @@
+const bcrypt = require("bcrypt");
+const Student = require("../Models/student");
+const jwt = require("jsonwebtoken");
+const secret = process.env.SECRET_KEY;
+const createToken = (id) => {
+  return jwt.sign({ id }, secret, { expiresIn: "1d" });
+};
+//student login
+const loginStudent = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user = await Student.findOne({ email });
+    if (!user) {
+      return res.status(400).json("Incorrect credentials!!");
+    }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).json("Incorrect credentials!!");
+    }
+
+    const token = createToken(user._id);
+    return res.status(200).json({ email, token });
+  } catch (error) {
+    return res.status(500).json({ err: error });
+  }
+};
+
+//student register
+const registerStudent = async (req, res) => {
+  const {
+    name,
+    password,
+    email,
+    phone,
+    birthDate,
+    address,
+    guardName,
+    guardPhone,
+    guardEmail,
+  } = req.body;
+  try {
+    let existEmail = await Student.findOne({ email });
+    if (existEmail) {
+      return res.status(400).json("Email already in use!!");
+    }
+    let existPhone = await Student.findOne({ phone });
+    if (existPhone) {
+      return res.status(400).json("Phone number already in use!!");
+    }
+    let user = new Student({
+      name,
+      password,
+      email,
+      phone,
+      birthDate,
+      address,
+      guardName,
+      guardPhone,
+      guardEmail,
+    });
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    const token = createToken(user._id);
+    return res.status(200).json({ email, token });
+  } catch (error) {
+    return res.status(500).json({ err: error });
+  }
+};
+
+module.exports = { loginStudent, registerStudent };
