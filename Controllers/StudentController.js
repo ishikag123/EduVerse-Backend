@@ -27,17 +27,8 @@ const loginStudent = async (req, res) => {
 
 //student register
 const registerStudent = async (req, res) => {
-  const {
-    name,
-    password,
-    email,
-    phone,
-    birthDate,
-    address,
-    guardName,
-    guardPhone,
-    guardEmail,
-  } = req.body;
+  const { name, password, email, phone, DOB, address, Gname, Gphone, GEmail } =
+    req.body;
   try {
     let existEmail = await Student.findOne({ email });
     if (existEmail) {
@@ -52,20 +43,30 @@ const registerStudent = async (req, res) => {
       password,
       email,
       phone,
-      birthDate,
+      DOB,
       address,
-      guardName,
-      guardPhone,
-      guardEmail,
+      Gname,
+      Gphone,
+      GEmail,
     });
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
     const token = createToken(user._id);
+
     return res.status(200).json({ email, token });
   } catch (error) {
     return res.status(500).json({ err: error });
   }
 };
 
-module.exports = { loginStudent, registerStudent };
+const getAllStudents = async (req, res) => {
+  try {
+    const users = await Student.find({});
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+module.exports = { loginStudent, registerStudent, getAllStudents };

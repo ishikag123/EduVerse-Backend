@@ -19,20 +19,20 @@ const studentSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  birthDate: {
+  DOB: {
     type: Date,
   },
   address: {
     type: String,
     required: true,
   },
-  guardName: {
+  Gname: {
     type: String,
   },
-  guardEmail: {
+  GEmail: {
     type: String,
   },
-  guardPhone: {
+  Gphone: {
     type: String,
   },
 });

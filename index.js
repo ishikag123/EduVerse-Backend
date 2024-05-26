@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const Connection = require("./db.js");
+const studentLoginRoute = require("./Routes/StudentLoginRoute.js");
 const studentRoute = require("./Routes/StudentRoute.js");
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/student", studentLoginRoute);
 app.use("/student", studentRoute);
 
 app.listen(PORT, () => {
