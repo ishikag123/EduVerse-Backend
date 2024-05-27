@@ -19,7 +19,7 @@ const teacherSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  birthDate: {
+  DOB: {
     type: Date,
   },
   address: {
