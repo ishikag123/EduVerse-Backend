@@ -93,7 +93,7 @@ const getAllTeachers = async (req, res) => {
 
 const getTeacher = async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = req.params.id;
     const user = await Teacher.findOne({ email });
     return res.status(200).json(user);
   } catch (error) {
