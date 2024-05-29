@@ -35,6 +35,9 @@ const studentSchema = new mongoose.Schema({
   Gphone: {
     type: String,
   },
+  courses: {
+    type: [String],
+  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);

@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const Teacher = require("../Models/teacher");
+//const Courses = require("../Models/courses");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
 
@@ -74,11 +75,35 @@ const registerTeacher = async (req, res) => {
 
 const getAllTeachers = async (req, res) => {
   try {
-    const users = await Teacher.find({});
+    const users = await Teacher.find(
+      {},
+      {
+        _id: 1,
+        name: 1,
+        address: 1,
+        rating: 1,
+        skills: 1,
+      }
+    );
     return res.status(200).json(users);
   } catch (error) {
     return res.status(500).json(error.message);
   }
 };
 
-module.exports = { loginTeacher, registerTeacher, getAllTeachers };
+const getTeacher = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await Teacher.findOne({ email });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+module.exports = {
+  loginTeacher,
+  registerTeacher,
+  getAllTeachers,
+  getTeacher,
+};

@@ -1,7 +1,18 @@
 const mongoose = require("mongoose");
 
 const courseSchema = new mongoose.Schema({
-  name: {
+  cname: {
+    type: String,
+    required: true,
+  },
+  teacher_name: {
+    type: String,
+  },
+  topic: {
+    type: String,
+    required: true,
+  },
+  created_by: {
     type: String,
     required: true,
   },
@@ -24,10 +35,10 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Category: {
+  category: {
     type: String,
   },
-  Level: {
+  level: {
     type: String,
   },
   startDate: {
@@ -63,8 +74,11 @@ const courseSchema = new mongoose.Schema({
     type: [String],
   },
   demo: {
-    type: URL,
-    required: true,
+    type: String,
+    //required: true,
+  },
+  joined_students: {
+    type: [String],
   },
 });
 

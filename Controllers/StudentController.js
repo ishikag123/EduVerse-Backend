@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Student = require("../Models/student");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
+
 const createToken = (id) => {
   return jwt.sign({ id }, secret, { expiresIn: "1d" });
 };
@@ -27,8 +28,18 @@ const loginStudent = async (req, res) => {
 
 //student register
 const registerStudent = async (req, res) => {
-  const { name, password, email, phone, DOB, address, Gname, Gphone, GEmail } =
-    req.body;
+  const {
+    name,
+    password,
+    email,
+    phone,
+    DOB,
+    address,
+    Gname,
+    Gphone,
+    GEmail,
+    courses,
+  } = req.body;
   try {
     let existEmail = await Student.findOne({ email });
     if (existEmail) {
@@ -48,6 +59,7 @@ const registerStudent = async (req, res) => {
       Gname,
       Gphone,
       GEmail,
+      courses,
     });
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
@@ -68,5 +80,13 @@ const getAllStudents = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-
-module.exports = { loginStudent, registerStudent, getAllStudents };
+const getStudent = async (req, res) => {
+  try {
+    const email = req.params.id;
+    const user = await Student.findOne({ email });
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+module.exports = { loginStudent, registerStudent, getAllStudents, getStudent };
