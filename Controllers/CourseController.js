@@ -66,7 +66,7 @@ const createCourse = async (req, res) => {
 //all courses of a teacher
 const getAllCourses = async (req, res) => {
   try {
-    const { created_by } = req.body;
+    const created_by = req.params.id;
     // const user = await Teacher.findOne({ email });
     // if (!user) {
     //   return res.status(400).json("Course creator do not exist!!");

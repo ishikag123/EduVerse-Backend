@@ -78,7 +78,7 @@ const getAllTeachers = async (req, res) => {
     const users = await Teacher.find(
       {},
       {
-        _id: 1,
+        email: 1,
         name: 1,
         address: 1,
         rating: 1,
