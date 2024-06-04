@@ -81,6 +81,8 @@ const getAllCourses = async (req, res) => {
         startDate: 1,
         endDate: 1,
         rating: 1,
+        enrolled: 1,
+        joined_students: 1,
       }
     );
     return res.status(200).json(courses);
@@ -125,4 +127,73 @@ const findAllCourses = async (req, res) => {
   }
 };
 
-module.exports = { createCourse, getAllCourses, getCourse, findAllCourses };
+const enrollStudent = async (req, res) => {
+  try {
+    const { cid, email } = req.body;
+    const _id = cid;
+    const course = await Courses.findByIdAndUpdate({ _id });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    if (course.joined_students.includes(email)) {
+      return res.status(400).json({ message: "Student already enrolled" });
+    }
+
+    course.joined_students.push(email);
+    await course.save();
+
+    return res.status(200).json(course);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const unEnroll = async (req, res) => {
+  try {
+    const { cid, email } = req.body;
+    const _id = cid;
+    const course = await Courses.findByIdAndUpdate(
+      _id,
+      { $pull: { joined_students: email } },
+      { new: true }
+    );
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    return res.status(200).json(course);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const findEnrolledCourses = async (req, res) => {
+  try {
+    const email = req.params.id;
+    const courses = await Courses.find(
+      { joined_students: email },
+      {
+        _id: 1,
+        cname: 1,
+        endDate: 1,
+      }
+    );
+
+    if (!courses) {
+      return res.status(400).json("No courses found");
+    }
+    return res.status(200).json(courses);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+module.exports = {
+  createCourse,
+  getAllCourses,
+  getCourse,
+  findAllCourses,
+  enrollStudent,
+  unEnroll,
+  findEnrolledCourses,
+};

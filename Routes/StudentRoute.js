@@ -8,6 +8,9 @@ const {
   findAllCourses,
   getCourse,
   getAllCourses,
+  enrollStudent,
+  unEnroll,
+  findEnrolledCourses,
 } = require("../Controllers/CourseController");
 const {
   getAllTeachers,
@@ -23,5 +26,8 @@ router.get("/get-course/:id", getCourse);
 router.get("/get-all-teachers", getAllTeachers);
 router.get("/get-teacher/:id", getTeacher);
 router.get("/get-courses-of/:id", getAllCourses);
+router.put("/enroll", enrollStudent);
+router.put("/unenroll", unEnroll);
+router.get("/enrolled-courses/:id", findEnrolledCourses);
 
 module.exports = router;
