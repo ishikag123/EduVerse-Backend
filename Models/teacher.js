@@ -36,7 +36,7 @@ const teacherSchema = new mongoose.Schema({
     type: Number,
   },
   rating: {
-    type: Number,
+    type: [Number],
   },
 });
 

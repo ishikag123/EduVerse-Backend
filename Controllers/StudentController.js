@@ -89,4 +89,33 @@ const getStudent = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
-module.exports = { loginStudent, registerStudent, getAllStudents, getStudent };
+
+const wishlistCourse = async (req, res) => {
+  try {
+    const { cname, cid, _id } = req.body;
+    const student = await Student.findByIdAndUpdate({ _id });
+    if (!student) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    if (!student.wishlist) {
+      student.wishlist = [];
+    }
+    student.wishlist.push({
+      cid: cid,
+      cname: cname,
+    });
+    await student.save();
+
+    return res.status(200).json(student);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  loginStudent,
+  registerStudent,
+  getAllStudents,
+  getStudent,
+  wishlistCourse,
+};

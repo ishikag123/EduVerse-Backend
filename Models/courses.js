@@ -68,7 +68,7 @@ const courseSchema = new mongoose.Schema({
     type: String,
   },
   rating: {
-    type: Number,
+    type: [Number],
   },
   comment: {
     type: [String],

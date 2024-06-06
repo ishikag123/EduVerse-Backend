@@ -38,6 +38,14 @@ const studentSchema = new mongoose.Schema({
   courses: {
     type: [String],
   },
+  wishlist: {
+    type: [
+      {
+        cname: String,
+        cid: String,
+      },
+    ],
+  },
 });
 
 module.exports = mongoose.model("Student", studentSchema);

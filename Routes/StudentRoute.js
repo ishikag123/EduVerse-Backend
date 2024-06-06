@@ -3,6 +3,7 @@ const studentAuth = require("../Middlewares/studentAuth");
 const {
   getAllStudents,
   getStudent,
+  wishlistCourse,
 } = require("../Controllers/StudentController");
 const {
   findAllCourses,
@@ -11,10 +12,13 @@ const {
   enrollStudent,
   unEnroll,
   findEnrolledCourses,
+  courseComment,
+  rateCourse,
 } = require("../Controllers/CourseController");
 const {
   getAllTeachers,
   getTeacher,
+  rateTeacher,
 } = require("../Controllers/TeacherController");
 const router = express.Router();
 router.use(studentAuth);
@@ -29,5 +33,9 @@ router.get("/get-courses-of/:id", getAllCourses);
 router.put("/enroll", enrollStudent);
 router.put("/unenroll", unEnroll);
 router.get("/enrolled-courses/:id", findEnrolledCourses);
+router.put("/comment", courseComment);
+router.put("/rate-course", rateCourse);
+router.put("/rate-teacher", rateTeacher);
+router.put("/wishlist", wishlistCourse);
 
 module.exports = router;

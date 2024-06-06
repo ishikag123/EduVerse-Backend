@@ -188,6 +188,44 @@ const findEnrolledCourses = async (req, res) => {
   }
 };
 
+const courseComment = async (req, res) => {
+  try {
+    const { cid, comment } = req.body;
+    const _id = cid;
+    const course = await Courses.findByIdAndUpdate({ _id });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    course.comment.push(comment);
+    await course.save();
+
+    return res.status(200).json(course);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const rateCourse = async (req, res) => {
+  try {
+    const { cid, rating } = req.body;
+    const course = await Courses.findById({ _id: cid });
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    if (!course.rating) {
+      course.rating = [];
+    }
+
+    course.rating.push(rating);
+    await course.save();
+
+    return res.status(200).json(course);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -196,4 +234,6 @@ module.exports = {
   enrollStudent,
   unEnroll,
   findEnrolledCourses,
+  courseComment,
+  rateCourse,
 };

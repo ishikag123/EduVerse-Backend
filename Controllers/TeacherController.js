@@ -101,9 +101,31 @@ const getTeacher = async (req, res) => {
   }
 };
 
+const rateTeacher = async (req, res) => {
+  try {
+    const { email, rating } = req.body;
+    const teacher = await Teacher.findOne({ email });
+
+    if (!teacher) {
+      return res.status(404).json({ message: "Teacher not found" });
+    }
+    if (!teacher.rating) {
+      teacher.rating = [];
+    }
+
+    teacher.rating.push(rating);
+    await teacher.save();
+
+    return res.status(200).json(teacher);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   loginTeacher,
   registerTeacher,
   getAllTeachers,
   getTeacher,
+  rateTeacher,
 };
