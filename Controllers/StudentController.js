@@ -80,6 +80,7 @@ const getAllStudents = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+
 const getStudent = async (req, res) => {
   try {
     const email = req.params.id;
@@ -92,19 +93,42 @@ const getStudent = async (req, res) => {
 
 const wishlistCourse = async (req, res) => {
   try {
-    const { cname, cid, _id } = req.body;
-    const student = await Student.findByIdAndUpdate({ _id });
+    const { cname, cid, email } = req.body;
+    const student = await Student.findOne({ email });
     if (!student) {
-      return res.status(404).json({ message: "Course not found" });
+      return res.status(404).json({ message: "Student not found" });
     }
     if (!student.wishlist) {
       student.wishlist = [];
+    }
+    const courseExists = student.wishlist.some((course) => course.cid === cid);
+
+    if (courseExists) {
+      return res.status(400).json({ message: "Course already in wishlist" });
     }
     student.wishlist.push({
       cid: cid,
       cname: cname,
     });
     await student.save();
+    return res.status(200).json(student);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const removeFromWishlist = async (req, res) => {
+  try {
+    const { cid, _id } = req.body;
+    const student = await Student.findByIdAndUpdate(
+      _id,
+      { $pull: { wishlist: { cid: cid } } },
+      { new: true }
+    );
+
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
 
     return res.status(200).json(student);
   } catch (error) {
@@ -118,4 +142,5 @@ module.exports = {
   getAllStudents,
   getStudent,
   wishlistCourse,
+  removeFromWishlist,
 };
