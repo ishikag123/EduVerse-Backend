@@ -9,7 +9,7 @@ const teacherLoginRoute = require("./Routes/TeacherLoginRoute.js");
 const teacherRoute = require("./Routes/TeacherRoute.js");
 
 dotenv.config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 const app = express();
 
 //Database connection
