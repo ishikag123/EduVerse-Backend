@@ -38,6 +38,9 @@ const teacherSchema = new mongoose.Schema({
   rating: {
     type: [Number],
   },
+  dp: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Teacher", teacherSchema);

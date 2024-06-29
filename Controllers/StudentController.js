@@ -136,6 +136,37 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
+const editStudent = async (req, res) => {
+  try {
+    const { _id, name, email, phone, DOB, address, Gname, Gphone, GEmail, dp } =
+      req.body;
+    const student = await Student.findByIdAndUpdate(
+      _id,
+      {
+        name: name,
+        email: email,
+        phone: phone,
+        DOB: DOB,
+        address: address,
+        Gname: Gname,
+        Gphone: Gphone,
+        GEmail: GEmail,
+        dp: dp,
+      },
+      { new: true } // This option returns the updated document
+    );
+
+    // Check if the student was found and updated
+    if (!student) {
+      return res.status(404).send({ message: "Student not found" });
+    }
+
+    res.status(200).send(student);
+  } catch (error) {
+    res.status(500).send({ message: "Error updating student", error });
+  }
+};
+
 module.exports = {
   loginStudent,
   registerStudent,
@@ -143,4 +174,5 @@ module.exports = {
   getStudent,
   wishlistCourse,
   removeFromWishlist,
+  editStudent,
 };

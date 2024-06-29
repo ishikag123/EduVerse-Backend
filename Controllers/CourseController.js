@@ -226,6 +226,59 @@ const rateCourse = async (req, res) => {
   }
 };
 
+const editCourse = async (req, res) => {
+  try {
+    const {
+      _id,
+      cname,
+      topic,
+      description,
+      duration,
+      timing,
+      location,
+      category,
+      level,
+      startDate,
+      endDate,
+      enrollmentLastDate,
+      seats,
+      fees,
+      prereq,
+      demo,
+    } = req.body;
+    const course = await Courses.findByIdAndUpdate(
+      _id,
+      {
+        cname: cname,
+        topic: topic,
+        description: description,
+        duration: duration,
+        timing: timing,
+        location: location,
+        category: category,
+        level: level,
+        startDate: startDate,
+        endDate: endDate,
+        enrollmentLastDate: enrollmentLastDate,
+        seats: seats,
+        fees: fees,
+        prereq: prereq,
+        demo: demo,
+      },
+      { new: true } // This option returns the updated document
+    );
+
+    // Check if the student was found and updated
+    if (!course) {
+      return res.status(404).send({ message: "Course not found" });
+    }
+
+    res.status(200).send(course);
+  } catch (error) {
+    res.status(500).send({ message: "Error updating course", error });
+  }
+};
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -236,4 +289,5 @@ module.exports = {
   findEnrolledCourses,
   courseComment,
   rateCourse,
+  editCourse,
 };

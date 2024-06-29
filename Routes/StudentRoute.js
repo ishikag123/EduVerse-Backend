@@ -5,6 +5,7 @@ const {
   getStudent,
   wishlistCourse,
   removeFromWishlist,
+  editStudent,
 } = require("../Controllers/StudentController");
 const {
   findAllCourses,
@@ -39,5 +40,6 @@ router.put("/rate-course", rateCourse);
 router.put("/rate-teacher", rateTeacher);
 router.put("/wishlist", wishlistCourse);
 router.put("/remove-from-wishlist", removeFromWishlist);
+router.put("/edit", editStudent);
 
 module.exports = router;
